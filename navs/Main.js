@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React,{useEffect} from 'react'
 import { UserIcon,ShoppingCartIcon,HomeIcon } from "react-native-heroicons/solid";
 import { useSelector } from 'react-redux';
 import Cart from '../screens/Cart';
@@ -52,7 +52,15 @@ const Main = () => {
     }
 
     
-       const ProfileStack = () => {
+       const ProfileStack = ({navigation}) => {
+        console.log('render')
+
+
+        useEffect(()=> {
+         return ()=> {
+          console.log('left')
+         }
+        }, []);
         return (
           <Stack.Navigator initialRouteName='MyProfile'>
               <Stack.Screen name="MyProfile" component={Profile}  options={{headerShown: false}} />
@@ -83,7 +91,6 @@ const Main = () => {
         );
       };
   return (
-        
       <Drawer.Navigator
       initialRouteName={'Home'}
       screenOptions={{

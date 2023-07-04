@@ -5,6 +5,8 @@
 import { server } from "../redux/store";
 import { useEffect, useState } from "react";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { getAdminProducts } from "../redux/actions/productActions";
+import { useSelector } from "react-redux";
 export const setTokenInterceptor = (token, setToken=true, gbResponse=true) => {
     if(setToken) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -99,5 +101,33 @@ export const useGetOrders = (isFocused, isAdmin = false,token) => {
     return {
       loading,
       orders,
+    };
+  };
+
+  export const useAdminProducts = (dispatch, isFocused) => {
+    const { products, inStock, outOfStock, error, loading } = useSelector(
+      (state) => state.product);
+
+      const { token} = useSelector((state) => state.user);
+  
+    useEffect(() => {
+      if (error) {
+        Toast.show({
+          type: "error",
+          text1: error,
+        });
+        dispatch({
+          type: "clearError",
+        });
+      }
+  
+      dispatch(getAdminProducts(token));
+    }, [dispatch, isFocused, error]);
+  
+    return {
+      products,
+      inStock,
+      outOfStock,
+      loading,
     };
   };

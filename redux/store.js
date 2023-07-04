@@ -52,5 +52,5 @@ export const persistor = persistStore(store)
 // 192.168.68.159 172.20.10.2 172.20.10.2
 // 172.20.10.2
 // 172.20.10.2 192.168.1.138
-export const server = "http:/192.168.1.138:5000/api/v1"
+export const server = "https://osimiri-back.onrender.com/api/v1"
             

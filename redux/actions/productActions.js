@@ -1,7 +1,7 @@
 // import axios from "axios";
 import { server } from "../store";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
-
+// import { fetchWithBearerToken } from "../../utils/supporters";
 export const getAllProducts = (keyword, category) => async (dispatch) => {
   // try {
     // dispatch({
@@ -78,26 +78,38 @@ export const getAllProducts = (keyword, category) => async (dispatch) => {
 
      
 
-export const getAdminProducts = () => async (dispatch) => {
-  try {
-    dispatch({
-      type: "getAdminProductsRequest",
-    });
-    const { data } = await axios.get(`${server}/product/admin`, {
-      withCredentials: true,
-    });
-
-    dispatch({
-      type: "getAdminProductsSuccess",
-      payload: data,
-    });
-  } catch (error) {
-    dispatch({
-      type: "getAdminProductsFail",
-      payload: error.response.data.message,
-    });
-  }
-};
+export const getAdminProducts = (token) => async (dispatch) => {
+ 
+    try {
+      dispatch({
+        type: "getAdminProductsRequest",
+      });
+  
+      const response = await fetch(`${server}/product/admin`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+  
+      const data = await response.json();
+  console.log(data)
+      dispatch({
+        type: "getAdminProductsSuccess",
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: "getAdminProductsFail",
+        payload: error.response.data.message,
+      });
+    }
+  };
 
 export const getProductDetails = (id) => async (dispatch) => {
   try {

@@ -222,26 +222,38 @@ export const placeOrder = (
   
   }
 
-export const processOrder = (id) => async (dispatch) => {
+
+
+export const createProduct = (formData,token) => async (dispatch) => {
   try {
     dispatch({
-      type: "processOrderRequest",
+      type: "addProductRequest",
     });
 
-    const response = await fetch(`${server}/order/single/${id}`, {
-      method: "PUT",
-      credentials: "include",
+  
+
+    const response = await fetch(`${server}/product/new`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+      credentials: 'include',
     });
+
+    if (!response.ok) {
+      throw new Error(response.status);
+    }
 
     const data = await response.json();
 
     dispatch({
-      type: "processOrderSuccess",
+      type: "addProductSuccess",
       payload: data.message,
     });
   } catch (error) {
     dispatch({
-      type: "processOrderFail",
+      type: "addProductFail",
       payload: error.response.data.message,
     });
   }
